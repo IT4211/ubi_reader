@@ -46,7 +46,9 @@ def display_list(ubifs):
     walk.index(ubifs, ubifs.master_node.root_lnum, ubifs.master_node.root_offs, inodes)
 
     for ino_num in inodes.keys():
-        print inodes[ino_num]['dent']['name']
+        print '-------- dent --------'
+        print inodes[ino_num]['dent'].display()
+        print '\t-------- inode --------'
         print inodes[ino_num]['ino'].display()
 
 if __name__=='__main__':
