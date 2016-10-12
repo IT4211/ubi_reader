@@ -47,7 +47,7 @@ def display_list(ubifs):
 
     for ino_num in inodes.keys():
         print '-------- dent --------'
-        print inodes[ino_num]['dent'].display()
+        print inodes[ino_num]['dent']
         print '\t-------- inode --------'
         print inodes[ino_num]['ino'].display()
 
