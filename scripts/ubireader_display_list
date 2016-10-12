@@ -46,12 +46,12 @@ def display_list(ubifs):
     walk.index(ubifs, ubifs.master_node.root_lnum, ubifs.master_node.root_offs, inodes)
 
     for ino_num in inodes.keys():
-        print inodes[ino_num]['ino']
+        print inodes[ino_num]['ino'].display()
 
 if __name__=='__main__':
     start = time.time()
-    description = 'show metadata about file in UBI or UBIFS image.'
-    usage = 'ubireader_display_metadata inode_number'
+    description = 'show list about file inode in UBI or UBIFS image.'
+    usage = 'ubireader_display_metadata filepath'
     parser = argparse.ArgumentParser(usage=usage, description=description)
 
     parser.add_argument('-l', '--log', action='store_true', dest='log',
@@ -127,12 +127,11 @@ if __name__=='__main__':
         ubi_obj = ubi(ufile_obj)
         # Display UBI info if not UBIFS request
         pass
-            
+
     elif filetype == UBIFS_NODE_MAGIC:
         # Create UBIFS object
         ubifs_obj = ubifs(ufile_obj)
         display_list(ubifs_obj)
-    
+
     else:
         print 'Something went wrong to get here'
-        
