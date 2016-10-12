@@ -47,10 +47,9 @@ def display_list(ubifs):
 
     for ino_num in inodes.keys():
         print inodes[ino_num]
-        if ino_num == 'dent':
-            print inodes[ino_num]['dent'].display()
-        else:
-            print inodes[ino_num]['ino'].display()
+        if 'dent' in inodes[ino_num].keys():
+            print inodes[ino_num]['dent'][1].display()
+        print inodes[ino_num]['ino'].display()
 
 if __name__=='__main__':
     start = time.time()
