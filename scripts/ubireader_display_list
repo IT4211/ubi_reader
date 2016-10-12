@@ -48,8 +48,10 @@ def display_list(ubifs):
     for ino_num in inodes.keys():
         print inodes[ino_num]
         if 'dent' in inodes[ino_num].keys():
-            print inodes[ino_num]['dent'][1].display()
-        print inodes[ino_num]['ino'].display()
+            for i in (inodes[ino_num]['dent'].value()).count():
+                print inodes[ino_num]['dent'][i].display()
+        else:
+            print inodes[ino_num]['ino'].display()
 
 if __name__=='__main__':
     start = time.time()
