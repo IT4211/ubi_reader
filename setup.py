@@ -17,6 +17,7 @@ setup(
     scripts=['scripts/ubireader_display_info',
              'scripts/ubireader_extract_files',
              'scripts/ubireader_extract_images',
-             'scripts/ubireader_utils_info'
+             'scripts/ubireader_utils_info',
+             'scripts/ubireader_display_list'
             ],
 )
