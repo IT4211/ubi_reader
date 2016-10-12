@@ -17,6 +17,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #############################################################
 
+import time
+
 def ubifs(ubifs, tab=''):
     buf = '%sUBIFS Image\n' % (tab)
     buf += '%s---------------------\n' % (tab)
@@ -110,6 +112,7 @@ def idx_node(node, tab=''):
 
 
 def ino_node(node, tab=''):
+    timestamp = ['atime_sec', 'ctime_sec', 'mtime_sec']
     buf = '%s%s\n' % (tab, node)
     buf += '%s---------------------\n' % (tab)
     tab += '\t'
@@ -119,6 +122,8 @@ def ino_node(node, tab=''):
         elif key == 'errors':
             buf += '%s%s: %s\n' % (tab, key, ','.join(value))
         else:
+            if key in timestamp:
+                value = time.ctime(int(value))
             buf += '%s%s: %s\n' % (tab, key, value)
     return buf
 
