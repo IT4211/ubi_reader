@@ -37,20 +37,46 @@ from ubireader.utils import guess_filetype, guess_start_offset, guess_leb_size, 
 
 def display_list(ubifs):
     """
-    :param ubifs:
-    :param ino_num:
-    :param tab:
+    :param ubifs: ubifs object
     :return:
     """
     inodes = {}
     walk.index(ubifs, ubifs.master_node.root_lnum, ubifs.master_node.root_offs, inodes)
+    print inodes
+    print inodes[1]
+    print "=========="
+    print inodes[1].keys()
+    #print (inodes[1].values())[0].display()
+    print "\n[+] listing ==========================\n"
+    for i in (inodes[1].values())[1]:
+	for key, value in i:
+		print key, value
+	print "\n"	
 
+
+
+    """
     for ino_num in inodes.keys():
+	print "inodes[ino_num] : " + str(inodes[ino_num])
 	if 'dent' in inodes[ino_num].keys():
 		for dent_node_obj in inodes[ino_num]['dent']:
 			print dent_node_obj.display()
+		print inodes[ino_num]['ino'].display()
         else:
             print inodes[ino_num]['ino'].display()
+    
+    for ino_num in inodes.keys():
+	if 'dent' in inodes[ino_num].keys():
+		dir_node = (inodes[ino_num].values())[-1]
+		for i in dir_node:
+			print i.display()
+		
+		#for key, value in inodes[ino_num]:
+		#	if key == 'name':
+		#		print "name : " + str(value)
+    """	
+
+
 
 if __name__=='__main__':
     start = time.time()
