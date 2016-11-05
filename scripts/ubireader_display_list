@@ -35,7 +35,7 @@ from ubireader.debug import error, log
 from ubireader.utils import guess_filetype, guess_start_offset, guess_leb_size, guess_peb_size
 
 
-def display_list(ubifs):
+def display_list(ubifs, inum):
     """
     :param ubifs: ubifs object
     :return:
@@ -85,7 +85,7 @@ def display_list(ubifs):
 if __name__=='__main__':
     start = time.time()
     description = 'show list about file inode in UBI or UBIFS image.'
-    usage = 'ubireader_display_metadata [options] filepath'
+    usage = 'ubireader_display_list [options] filepath'
     parser = argparse.ArgumentParser(usage=usage, description=description)
 
     parser.add_argument('-l', '--log', action='store_true', dest='log',
@@ -94,20 +94,13 @@ if __name__=='__main__':
     parser.add_argument('-v', '--verbose-log', action='store_true', dest='verbose',
                         help='Prints nearly everything about anything to screen.')
 
-    parser.add_argument('-u', '--ubifs-info', action='store_true', dest='ubifs_info',
-                        help='Get UBIFS information from inside a UBI image. (default: false)')
-
     parser.add_argument('-p', '--peb-size', type=int, dest='block_size',
-                        help='Specify PEB size. (UBI Only)')
-
+			help='Specify PEB size. (UBI Only)')
+    
     parser.add_argument('-e', '--leb-size', type=int, dest='block_size',
-                        help='Specify LEB size. (UBIFS Only)')
+			help='Specify LEB size. (UBIFS Only)')
 
-    parser.add_argument('-s', '--start-offset', type=int, dest='start_offset',
-                        help='Specify offset of UBI/UBIFS data in file. (default: 0)')
-
-    parser.add_argument('-n', '--end-offset', type=int, dest='end_offset',
-                        help='Specify end offset of UBI/UBIFS data in file.')
+    parser.add_argument('-i', '--inum', type=int, dest='inum', help='Specify Inode number.')
 
     parser.add_argument('filepath', help='File to extract contents of.')
 
@@ -122,25 +115,25 @@ if __name__=='__main__':
         if not os.path.exists(path):
             parser.error("File path doesn't exist.")
 
-    if args.start_offset:
-        start_offset = args.start_offset
-    else:
-        start_offset = guess_start_offset(path)
+    start_offset = guess_start_offset(path)
 
-    if args.end_offset:
-        end_offset = args.end_offset
+    end_offset = None
+	 
+    if args.inum:
+        inum = args.inum
     else:
-        end_offset = None
+        inum = 1
+
+
 
     filetype = guess_filetype(path, start_offset)
+
     if not filetype:
         parser.error('Could not determine file type.')
 
     settings.logging_on = args.log
 
     settings.logging_on_verbose = args.verbose
-
-    ubifs_info = args.ubifs_info
 
     if args.block_size:
         block_size = args.block_size
@@ -165,7 +158,7 @@ if __name__=='__main__':
     elif filetype == UBIFS_NODE_MAGIC:
         # Create UBIFS object
         ubifs_obj = ubifs(ufile_obj)
-        display_list(ubifs_obj)
+        display_list(ubifs_obj, inum)
 
     else:
         print 'Something went wrong to get here'
