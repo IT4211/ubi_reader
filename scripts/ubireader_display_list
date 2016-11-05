@@ -46,10 +46,6 @@ def display_list(ubifs):
     fls_type = str()
     inodes = {}
     walk.index(ubifs, ubifs.master_node.root_lnum, ubifs.master_node.root_offs, inodes)
-    print "\n[+] inodes ==========================\n"
-    print inodes[1].keys()
-    #print (inodes[1].values())[0].display()
-    print "\n[+] listing ==========================\n"
     for i in (inodes[1].values())[1]:
 	for key, value in i:
 		if key == 'inum':
@@ -61,7 +57,7 @@ def display_list(ubifs):
 				fls_type = 'r/r'
 			elif value == UBIFS_ITYPE_DIR:
 				fls_type = 'd/d'
-	print fls_type + ' ' + str(fls_inum) + ' ' + fls_name 
+	print "%s %s: %s" % (fls_type, str(fls_inum), fls_name) 
 
     """
     for ino_num in inodes.keys():
