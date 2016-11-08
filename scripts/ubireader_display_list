@@ -38,7 +38,7 @@ def distinguish(inodes, inum):
     if 'dent' in inodes[inum]:
     	return True
     else:
-	    return False
+	return False
     
 
 def display_list(ubifs, inum=1):
@@ -70,8 +70,13 @@ def display_list(ubifs, inum=1):
     	print "%s %s: %s" % (fls_type, str(fls_inum), fls_name) 
 
     else:
-        pass
-
+        fls_type = 'r/r'
+        i = (inodes[inum].values())[0]
+        for key, value in i:
+            if key == 'key':
+            	fls_inum = value['ino_num']
+            
+        print "%s %s: " % (fls_type, str(fls_inum))
 
 
     """
