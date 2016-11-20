@@ -38,7 +38,7 @@ def distinguish(inodes, inum):
     if 'dent' in inodes[inum]:
     	return True
     else:
-	return False
+        return False
     
 
 def display_list(ubifs, inum=1):
@@ -51,55 +51,29 @@ def display_list(ubifs, inum=1):
     
     if distinguish(inodes, inum):    
         for i in (inodes[inum].values())[1]:
-            print "[debug] inode data =============="
-	    print i.display()
-            print "[debug] ========================="
-    	    for key, value in i:
-    	        if key == 'inum':
-    			fls_inum = value
-    		elif key == 'name':
-    			fls_name = value
-    		elif key == 'type':
-    			if value == UBIFS_ITYPE_REG:
-    				fls_type = 'r/r'
-    			elif value == UBIFS_ITYPE_DIR:
-    				fls_type = 'd/d'
+            for key, value in i:
+            	if key == 'inum':
+            	    fls_inum = value
+                elif key == 'name':
+                	fls_name = value
+                elif key == 'type':
+                	if value == UBIFS_ITYPE_REG:
+                		fls_type = '[REG]'
+                	elif value == UBIFS_ITYPE_DIR:
+                		fls_type = '[DIR]'
                 else:
-    	            continue
+                	continue
 
-    	print "%s %s: %s" % (fls_type, str(fls_inum), fls_name) 
-
+            print "%s %d: %s" % (fls_type, fls_inum, fls_name) 
+    
     else:
-        fls_type = 'r/r'
+        fls_type = '[REG]'
         i = (inodes[inum].values())[0]
         for key, value in i:
             if key == 'key':
             	fls_inum = value['ino_num']
             
         print "%s %s: " % (fls_type, str(fls_inum))
-
-
-    """
-    for ino_num in inodes.keys():
-	print "inodes[ino_num] : " + str(inodes[ino_num])
-	if 'dent' in inodes[ino_num].keys():
-		for dent_node_obj in inodes[ino_num]['dent']:
-			print dent_node_obj.display()
-		print inodes[ino_num]['ino'].display()
-        else:
-            print inodes[ino_num]['ino'].display()
-    
-    for ino_num in inodes.keys():
-	if 'dent' in inodes[ino_num].keys():
-		dir_node = (inodes[ino_num].values())[-1]
-		for i in dir_node:
-			print i.display()
-		
-		#for key, value in inodes[ino_num]:
-		#	if key == 'name':
-		#		print "name : " + str(value)
-    """	
-
 
 
 if __name__=='__main__':
