@@ -21,6 +21,7 @@ from ubireader.ubifs import nodes
 from ubireader.ubifs.defines import *
 from ubireader.debug import error, log, verbose_log, verbose_display
 
+
 def index(ubifs, lnum, offset, inodes={}):
     """Walk the index gathering Inode, Dir Entry, and File nodes.
 
@@ -42,12 +43,12 @@ def index(ubifs, lnum, offset, inodes={}):
         chdr = nodes.common_hdr(buf)
         log(index , '%s file addr: %s' % (chdr, ubifs.file.last_read_addr()))
         verbose_display(chdr)
-
         node_buf = ubifs.file.read(chdr.len - UBIFS_COMMON_HDR_SZ)
         file_offset = ubifs.file.last_read_addr()
 
     except Exception, e:
-        error(index, 'Fatal', 'leb: %s, ubifs offset: %s, error: %s' % (lnum, ((ubifs.leb_size * lnum) + offset), e))
+        return
+        #error(index, 'Fatal', 'leb: %s, ubifs offset: %s, error: %s' % (lnum, ((ubifs.leb_size * lnum) + offset), e))
 
 
     if chdr.node_type == UBIFS_IDX_NODE:
