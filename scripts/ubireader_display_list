@@ -34,23 +34,55 @@ from ubireader.ubi_io import ubi_file, leb_virtual_file
 from ubireader.debug import error, log
 from ubireader.utils import guess_filetype, guess_start_offset, guess_leb_size, guess_peb_size
 
+list_buf = str()
+fls_inum = int()
+fls_size = int()
+fls_name = str()
+fls_type = str()
+fls_atime = str()
+fls_ctime = str()
+fls_mtime = str()
+
 def distinguish(inodes, inum):
     if 'dent' in inodes[inum]:
     	return True
     else:
         return False
     
+def display_list(ubifs, inum=1, r = 1):
 
-def display_list(ubifs, inum=1):
+    global list_buf
+    global fls_inum
+    global fls_size
+    global fls_name
+    global fls_type
+    global fls_atime
+    global fls_ctime
+    global fls_mtime
 
-    fls_inum = int()
-    fls_name = str()
-    fls_type = str()
+
     inodes = {}
     walk.index(ubifs, ubifs.master_node.root_lnum, ubifs.master_node.root_offs, inodes)
-    
-    if distinguish(inodes, inum):    
+    print type(inodes)
+
+
+    if distinguish(inodes, inum):
+        try:
+            j = (inodes[inum].values())[0]
+            for key, value in j:
+                if key == 'atime_sec':
+                    fls_atime = time.ctime(int(value))
+                elif key == 'ctime_sec':
+                    fls_ctime = time.ctime(int(value))
+                elif key == 'mtime_sec':
+                    fls_mtime = time.ctime(int(value))
+        except ValueError, e:
+            print e, inum
+        
+
         for i in (inodes[inum].values())[1]:
+            if r == 0:
+                return
             for key, value in i:
             	if key == 'inum':
             	    fls_inum = value
@@ -63,17 +95,22 @@ def display_list(ubifs, inum=1):
                 		fls_type = '[DIR]'
                 else:
                 	continue
+            #print "%s %d: %s" % (fls_type, fls_inum, fls_name)
+            list_buf += "%s %-3d | %s | %s | %s | %s\n" % ( fls_type, fls_inum, fls_mtime, fls_atime, fls_ctime, fls_name )
+            display_list(ubifs, fls_inum, 0)
 
-            print "%s %d: %s" % (fls_type, fls_inum, fls_name) 
-    
+
+        print list_buf
+        
+
     else:
+        if r == 0:
+            return
         fls_type = '[REG]'
         i = (inodes[inum].values())[0]
-        for key, value in i:
-            if key == 'key':
-            	fls_inum = value['ino_num']
-            
-        print "%s %s: " % (fls_type, str(fls_inum))
+        #print "[debug]", i
+        print i.display()
+
 
 
 if __name__=='__main__':
